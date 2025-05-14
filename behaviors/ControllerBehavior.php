@@ -303,14 +303,13 @@ class ControllerBehavior extends Behavior
         } else {
             $module = Yii::$app->getModule('stats');
         }
-
-        if (preg_match('/(?!&)utm_([a-z0-9=%]+)/i', $request->getReferrer()) || preg_match('/(?!&)utm_([a-z0-9=%]+)/i', $request->getUrl())) {
+        if (preg_match('/(?!&)utm_([a-z0-9=%]+)/i', $request->getReferrer() ?? '') || preg_match('/(?!&)utm_([a-z0-9=%]+)/i', $request->getUrl())) {
             return Visitors::TYPE_FROM_ADVERTS;
         }
 
         if (count($module->advertisingSystems) > 0) {
             $patterns = implode("|", $module->advertisingSystems);
-            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer()) || preg_match('/(' . $patterns . ')/i', $request->getUrl())) {
+            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer() ?? '') || preg_match('/(' . $patterns . ')/i', $request->getUrl())) {
                 return Visitors::TYPE_FROM_ADVERTS;
             }
         }
@@ -323,14 +322,14 @@ class ControllerBehavior extends Behavior
 
         if (count($module->searchEngines) > 0) {
             $patterns = implode("|", $module->searchEngines);
-            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer())) {
+            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer() ?? '')) {
                 return Visitors::TYPE_FROM_SEARCH;
             }
         }
 
         if (count($module->socialNetworks) > 0) {
             $patterns = implode("|", $module->socialNetworks);
-            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer())) {
+            if (preg_match('/(' . $patterns . ')/i', $request->getReferrer() ?? '')) {
                 return Visitors::TYPE_FROM_SOCIALS;
             }
         }
